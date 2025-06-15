@@ -3,12 +3,59 @@
 <head>
   <title>Real-Time Chat App</title>
   <style>
-    body { font-family: sans-serif; padding: 20px; }
-    #messages { list-style: none; padding: 0; max-height: 300px; overflow-y: auto; }
-    #messages li { margin-bottom: 10px; }
-    img { max-width: 200px; display: block; margin-top: 5px; }
-  </style>
+  body {
+    font-family: sans-serif;
+    padding: 20px;
+  }
+
+  #messages {
+    list-style: none;
+    padding: 0;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  #messages li {
+    margin-bottom: 14px;
+    padding: 6px;
+    border-bottom: 1px solid #eee;
+  }
+
+  #messages li img {
+    max-width: 200px;
+    display: block;
+    margin-top: 5px;
+    border-radius: 6px;
+  }
+
+  .msg-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+
+  .msg-header img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  strong {
+    font-weight: 600;
+  }
+</style>
 </head>
+<div id="joinScreen">
+  <h2>Join the Chat</h2>
+  <input type="text" id="usernameInput" placeholder="Enter your name" required>
+  <input type="text" id="avatarInput" placeholder="Avatar URL (optional)">
+  <button id="joinBtn">Join</button>
+</div>
+
+<div id="chatScreen" style="display:none;">
+
 <body>
   <h1>💬 Real-Time Chat</h1>
   <ul id="messages"></ul>
