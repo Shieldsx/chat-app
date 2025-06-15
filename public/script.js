@@ -1,4 +1,4 @@
-const socket = io();
+const socket = io("https://chat-app-backend-5clp.onrender.com");
 const form = document.getElementById('form');
 const input = document.getElementById('input');
 const fileInput = document.getElementById('fileInput');
@@ -19,7 +19,7 @@ form.addEventListener('submit', async (e) => {
     const formData = new FormData();
     formData.append('file', file);
 
-    const res = await fetch('/upload', {
+    const res = await fetch('https://chat-app-backend-5clp.onrender.com/upload', {
       method: 'POST',
       body: formData
     });
