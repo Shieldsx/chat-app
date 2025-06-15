@@ -19,13 +19,15 @@ form.addEventListener('submit', async (e) => {
     const formData = new FormData();
     formData.append('file', file);
 
-  const res = await fetch('https://chat-app-backend-5clp.onrender.com/upload', {
-  method: 'POST',
-  body: formData
-});
+    const res = await fetch('https://chat-app-backend-5clp.onrender.com/upload', {
+      method: 'POST',
+      body: formData
+    });
 
     const data = await res.json();
-    socket.emit('chat message', { type: 'image', content: data.fileUrl });
+    const backendUrl = 'https://chat-app-backend-5clp.onrender.com';
+    const imageUrl = `${backendUrl}${data.fileUrl}`;
+    socket.emit('chat message', { type: 'image', content: imageUrl });
     fileInput.value = '';
   }
 });
