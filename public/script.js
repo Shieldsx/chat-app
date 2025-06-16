@@ -14,6 +14,22 @@ const messages = document.getElementById('messages');
 let username = '';
 let avatarUrl = '';
 
+// 🟢 Show avatar preview
+avatarFileInput.addEventListener('change', () => {
+  const file = avatarFileInput.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      avatarPreview.src = e.target.result;
+      avatarPreview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  } else {
+    avatarPreview.src = '';
+    avatarPreview.style.display = 'none';
+  }
+});
+
 // 🟢 Join button with avatar upload
 joinBtn.addEventListener('click', async () => {
   const name = usernameInput.value.trim();
@@ -126,4 +142,20 @@ socket.on('chat message', (msg) => {
   messages.appendChild(li);
   messages.scrollTop = messages.scrollHeight;
 });
-// 🟢 Handle enter key for message input
+// 🟢 Handle socket connection errors
+// 🟢 Preview selected avatar image before upload
+avatarFileInput.addEventListener('change', () => {
+  const file = avatarFileInput.files[0];
+  if (file && file.type.startsWith('image/')) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      avatarPreview.src = e.target.result;
+      avatarPreview.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  } else {
+    avatarPreview.style.display = 'none';
+    avatarPreview.src = '';
+  }
+});
+// 🟢 Handle socket connection errors
