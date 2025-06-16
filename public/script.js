@@ -5,7 +5,7 @@ const chatScreen = document.getElementById('chatScreen');
 const joinBtn = document.getElementById('joinBtn');
 const usernameInput = document.getElementById('usernameInput');
 const avatarFileInput = document.getElementById('avatarFile');
-
+const avatarPreview = document.getElementById('avatarPreview');
 const form = document.getElementById('form');
 const input = document.getElementById('input');
 const fileInput = document.getElementById('fileInput');
