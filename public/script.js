@@ -4,7 +4,7 @@ const joinScreen = document.getElementById('joinScreen');
 const chatScreen = document.getElementById('chatScreen');
 const joinBtn = document.getElementById('joinBtn');
 const usernameInput = document.getElementById('usernameInput');
-const avatarInput = document.getElementById('avatarInput');
+const avatarFileInput = document.getElementById('avatarFile');
 
 const form = document.getElementById('form');
 const input = document.getElementById('input');
@@ -14,10 +14,9 @@ const messages = document.getElementById('messages');
 let username = '';
 let avatarUrl = '';
 
-// Join button click
-joinBtn.addEventListener('click', () => {
+// 🟢 Join button with avatar upload
+joinBtn.addEventListener('click', async () => {
   const name = usernameInput.value.trim();
-  const avatar = avatarInput.value.trim();
 
   if (!name) {
     alert("Please enter a name.");
@@ -25,17 +24,36 @@ joinBtn.addEventListener('click', () => {
   }
 
   username = name;
-  avatarUrl = avatar || ''; // optional
+  const avatarFile = avatarFileInput.files[0];
+
+  if (avatarFile) {
+    const formData = new FormData();
+    formData.append('avatar', avatarFile);
+
+    try {
+      const res = await fetch('https://chat-app-backend-5clp.onrender.com/avatar', {
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      avatarUrl = `https://chat-app-backend-5clp.onrender.com${data.fileUrl}`;
+    } catch (err) {
+      console.error('Avatar upload failed', err);
+      alert('Avatar upload failed. Try again.');
+      return;
+    }
+  }
 
   joinScreen.style.display = 'none';
   chatScreen.style.display = 'block';
 });
 
-// Handle message form submission
+// 🟢 Message form
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // Send text message
+  // Text message
   if (input.value.trim()) {
     socket.emit('chat message', {
       type: 'text',
@@ -46,7 +64,7 @@ form.addEventListener('submit', async (e) => {
     input.value = '';
   }
 
-  // Send image
+  // Image message
   const file = fileInput.files[0];
   if (file) {
     const formData = new FormData();
@@ -71,7 +89,7 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-// Render received messages
+// 🟢 Render messages
 socket.on('chat message', (msg) => {
   const li = document.createElement('li');
 
@@ -100,10 +118,12 @@ socket.on('chat message', (msg) => {
   } else if (msg.type === 'image') {
     const img = document.createElement('img');
     img.src = msg.content;
+    img.style.maxWidth = '200px';
+    img.style.borderRadius = '8px';
     li.appendChild(img);
   }
 
   messages.appendChild(li);
   messages.scrollTop = messages.scrollHeight;
 });
-// Handle user disconnect
+// 🟢 Handle enter key for message input
