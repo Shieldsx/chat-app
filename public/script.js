@@ -53,8 +53,8 @@ joinBtn.addEventListener('click', async () => {
   });
      
    const data = await res.json();
-   console.log('🧪 Avatar upload response:', data);
-   avatarUrl = data.fileUrl; // ✅ Assign Cloudinary URL directly
+console.log('🖼️ Avatar upload response:', data);
+avatarUrl = data.fileUrl; // ✅ correct!
     } catch (err) {
       console.error('Avatar upload failed', err);
       alert('Avatar upload failed. Try again.');
