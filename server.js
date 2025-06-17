@@ -34,22 +34,20 @@ const upload = multer({
   }
 });
 
-// 🟢 Chat image upload
+// ✅ Chat image upload
 app.post('/upload', upload.single('file'), (req, res) => {
   res.json({ fileUrl: `/uploads/${req.file.filename}` });
 });
 
-// 🟢 Avatar image upload
+// ✅ Avatar image upload (fixed for local)
 app.post('/avatar', upload.single('avatar'), (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
 
-  // ✅ FIX: Cloudinary gives you 'path' and 'secure_url'
-  res.json({
-    fileUrl: req.file.path || req.file.secure_url
-  });
+  const fileUrl = `/uploads/${req.file.filename`; // return relative URL
+  res.json({ fileUrl });
 });
 
-// 🟢 Socket.IO chat logic
+// ✅ Socket.IO chat logic
 io.on('connection', (socket) => {
   console.log('User connected:', socket.id);
 
@@ -62,9 +60,8 @@ io.on('connection', (socket) => {
   });
 });
 
-// 🟢 Start server
+// ✅ Start server
 const PORT = 3000;
 server.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
-// 🟢 Serve index.html
