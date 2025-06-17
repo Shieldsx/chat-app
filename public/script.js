@@ -57,7 +57,7 @@ joinBtn.addEventListener('click', async () => {
       return;
     }
   }
-
+console.log('✅ Final avatarUrl:', avatarUrl);
   joinScreen.style.display = 'none';
   chatScreen.style.display = 'block';
 });
