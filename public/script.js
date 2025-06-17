@@ -48,12 +48,13 @@ joinBtn.addEventListener('click', async () => {
 
     try {
       const res = await fetch('https://chat-app-backend-5clp.onrender.com/avatar', {
-        method: 'POST',
-        body: formData
-      });
-
-      const data = await res.json();
-      avatarUrl = `https://chat-app-backend-5clp.onrender.com${data.fileUrl}`;
+      method: 'POST',
+      body: formData
+  });
+     
+   const data = await res.json();
+   console.log('🧪 Avatar upload response:', data);
+   avatarUrl = data.fileUrl; // ✅ Assign Cloudinary URL directly
     } catch (err) {
       console.error('Avatar upload failed', err);
       alert('Avatar upload failed. Try again.');
