@@ -14,10 +14,10 @@ const messages = document.getElementById('messages');
 let username = '';
 let avatarUrl = '';
 
-// 🟢 Show avatar preview
+// 🟢 Preview selected avatar
 avatarFileInput.addEventListener('change', () => {
   const file = avatarFileInput.files[0];
-  if (file) {
+  if (file && file.type.startsWith('image/')) {
     const reader = new FileReader();
     reader.onload = (e) => {
       avatarPreview.src = e.target.result;
@@ -30,31 +30,27 @@ avatarFileInput.addEventListener('change', () => {
   }
 });
 
-// 🟢 Join button with avatar upload
+// 🟢 Join with optional avatar
 joinBtn.addEventListener('click', async () => {
   const name = usernameInput.value.trim();
-
-  if (!name) {
-    alert("Please enter a name.");
-    return;
-  }
+  if (!name) return alert("Please enter a name.");
 
   username = name;
-  const avatarFile = avatarFileInput.files[0];
 
+  const avatarFile = avatarFileInput.files[0];
   if (avatarFile) {
     const formData = new FormData();
     formData.append('avatar', avatarFile);
 
     try {
       const res = await fetch('https://chat-app-backend-5clp.onrender.com/avatar', {
-      method: 'POST',
-      body: formData
-  });
-     
-   const data = await res.json();
-console.log('🖼️ Avatar upload response:', data);
-avatarUrl = data.fileUrl; // ✅ correct!
+        method: 'POST',
+        body: formData
+      });
+
+      const data = await res.json();
+      console.log('🖼️ Avatar URL:', data.fileUrl);
+      avatarUrl = data.fileUrl; // ✅ use Cloudinary URL directly
     } catch (err) {
       console.error('Avatar upload failed', err);
       alert('Avatar upload failed. Try again.');
@@ -66,11 +62,10 @@ avatarUrl = data.fileUrl; // ✅ correct!
   chatScreen.style.display = 'block';
 });
 
-// 🟢 Message form
+// 🟢 Submit message
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  // Text message
   if (input.value.trim()) {
     socket.emit('chat message', {
       type: 'text',
@@ -81,7 +76,6 @@ form.addEventListener('submit', async (e) => {
     input.value = '';
   }
 
-  // Image message
   const file = fileInput.files[0];
   if (file) {
     const formData = new FormData();
@@ -93,7 +87,7 @@ form.addEventListener('submit', async (e) => {
     });
 
     const data = await res.json();
-    const imageUrl = `https://chat-app-backend-5clp.onrender.com${data.fileUrl}`;
+    const imageUrl = data.fileUrl; // ✅ Cloudinary gives full URL
 
     socket.emit('chat message', {
       type: 'image',
@@ -143,20 +137,4 @@ socket.on('chat message', (msg) => {
   messages.appendChild(li);
   messages.scrollTop = messages.scrollHeight;
 });
-// 🟢 Handle socket connection errors
-// 🟢 Preview selected avatar image before upload
-avatarFileInput.addEventListener('change', () => {
-  const file = avatarFileInput.files[0];
-  if (file && file.type.startsWith('image/')) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      avatarPreview.src = e.target.result;
-      avatarPreview.style.display = 'block';
-    };
-    reader.readAsDataURL(file);
-  } else {
-    avatarPreview.style.display = 'none';
-    avatarPreview.src = '';
-  }
-});
-// 🟢 Handle socket connection errors
+// 🟢 Handle disconnect
