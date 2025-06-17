@@ -41,11 +41,12 @@ app.post('/upload', upload.single('file'), (req, res) => {
 
 // 🟢 Avatar image upload
 app.post('/avatar', upload.single('avatar'), (req, res) => {
-  if (!req.file) {
-    return res.status(400).json({ error: 'No file uploaded' });
-  }
-  const fileUrl = `/uploads/${req.file.filename}`;
-  res.json({ fileUrl });
+  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+
+  // ✅ FIX: Cloudinary gives you 'path' and 'secure_url'
+  res.json({
+    fileUrl: req.file.path || req.file.secure_url
+  });
 });
 
 // 🟢 Socket.IO chat logic
